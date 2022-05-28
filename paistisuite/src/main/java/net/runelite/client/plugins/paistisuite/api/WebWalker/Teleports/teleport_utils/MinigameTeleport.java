@@ -36,8 +36,8 @@ public enum MinigameTeleport {
     //        20 Tithe Farm: Entering the minigame area at least once, which requires 100% Hosidius favour and 34 Farming
     //        21 Trouble Brewing: Cabin Fever and Cooking 40+
     //        22 TzHaar Fight Pit
-    BARB_ASS(1, new RSTile(2531, 3577, 0), true, () -> PUtils.getClient().getVarbitValue(3251) >= 1),
-    BLAST_FURNACE(2, new RSTile(2933, 10183, 0), true, () -> PUtils.getClient().getVarbitValue(575) >= 1),
+    BARB_ASS(1, new RSTile(2531, 3577, 0), true, () -> PVars.getVarbit(3251) >= 1),
+    BLAST_FURNACE(2, new RSTile(2933, 10183, 0), true, () -> PVars.getVarbit(575) >= 1),
     BURTHROPE_GAMES(3, new RSTile(2208, 4938, 0), true),
     CASTLE_WARS(4, new RSTile(2439, 3092, 0), true),
     CLAN_WARS(5, new RSTile(3151, 3636, 0), true),

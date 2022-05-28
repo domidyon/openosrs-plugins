@@ -1046,6 +1046,6 @@ public enum Teleport {
     }
 
     private static boolean hasBeenToZeah() {
-        return RSVarBit.get(4897).getValue() > 0;
+        return PVars.getVarbit(4897) > 0;
     }
 }

@@ -24,6 +24,7 @@ import net.runelite.client.plugins.paistisuite.api.WebWalker.wrappers.AccurateMo
 import net.runelite.client.plugins.paistisuite.api.WebWalker.wrappers.RSTile;
 
 import javax.inject.Singleton;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
@@ -380,17 +381,15 @@ public class WalkerEngine {
             PBanking.closeBank();
             return WaitFor.condition(2000, () -> !PBanking.isBankOpen() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
         }
-        for (Teleport teleport : Teleport.values()) {
-            if (!teleport.getRequirement().satisfies()) continue;
-            if (teleport.isAtTeleportSpot(startPosition) && !teleport.isAtTeleportSpot(playerPosition)) {
-                log.info("Using teleport method: " + teleport);
-                if (teleport.trigger()) {
-                    return WaitFor.condition(PUtils.random(5000, 20000),
-                            () -> startPosition.distanceTo(new RSTile(PPlayer.location())) < 10 ?
-                                    WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
-                }
-                return false;
+        List<Teleport> validTeleports = Arrays.stream(Teleport.values()).filter(t -> t.isAtTeleportSpot(startPosition) && !t.isAtTeleportSpot(playerPosition)).filter(t -> t.getRequirement().satisfies()).collect(Collectors.toList());
+        for (Teleport teleport : validTeleports) {
+            log.info("Using teleport method: " + teleport);
+            if (teleport.trigger()) {
+                return WaitFor.condition(PUtils.random(5000, 20000),
+                        () -> startPosition.distanceTo(new RSTile(PPlayer.location())) < 10 ?
+                                WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
             }
+            return false;
         }
         return true;
     }

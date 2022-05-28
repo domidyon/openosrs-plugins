@@ -38,8 +38,6 @@ public class PVars {
     }
 
     public static Integer getVarbit(final int varbitId) {
-        return PUtils.clientOnly(() -> {
-            return PUtils.getClient().getVarbitValue(varbitId);
-        }, "getVarbitValue");
+        return PUtils.clientOnly(() -> PUtils.getClient().getVarbitValue(varbitId), "getVarbitValue");
     }
 }

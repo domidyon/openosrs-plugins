@@ -406,7 +406,7 @@ public enum Teleport {
 
     CABBAGE_PATCH_TELEPORT(
             TeleportType.UNLIMITED_TELE, new RSTile(3049, 3287, 0),
-            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && HasItems.EXPLORERS_RING_FILTER.getHasItem().checkHasItem(),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && HasItems.EXPLORERS_RING_FILTER.getHasItem().checkHasItem() && PVars.getVarbit(4552) > 0,
             () -> WearableItemTeleport.teleport(WearableItemTeleport.EXPLORERS_RING_FILTER, "Teleport")
     ),
 

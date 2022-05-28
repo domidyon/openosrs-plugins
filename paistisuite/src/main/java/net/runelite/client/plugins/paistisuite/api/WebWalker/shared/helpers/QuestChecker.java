@@ -52,6 +52,6 @@ public class QuestChecker {
     ));
 
     public static int getNmzQuestsCompleted() {
-        return (int) NMZ_QUESTS.stream().filter(q -> q.getState(PUtils.getClient()) == QuestState.FINISHED).count();
+        return PUtils.clientOnly(() -> NMZ_QUESTS.stream().filter(q -> q.getState(PUtils.getClient()) == QuestState.FINISHED).count(), "quest_checker").intValue();
     }
 }

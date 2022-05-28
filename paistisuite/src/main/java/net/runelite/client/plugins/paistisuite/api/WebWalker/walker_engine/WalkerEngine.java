@@ -381,7 +381,8 @@ public class WalkerEngine {
             PBanking.closeBank();
             return WaitFor.condition(2000, () -> !PBanking.isBankOpen() ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
         }
-        List<Teleport> validTeleports = Arrays.stream(Teleport.values()).filter(t -> t.isAtTeleportSpot(startPosition) && !t.isAtTeleportSpot(playerPosition)).filter(t -> t.getRequirement().satisfies()).collect(Collectors.toList());
+        List<Teleport> validTeleports = Arrays.stream(Teleport.values()).filter(t -> t.isAtTeleportSpot(startPosition) && !t.isAtTeleportSpot(playerPosition)
+                && t.getRequirement().satisfies()).collect(Collectors.toList());
         for (Teleport teleport : validTeleports) {
             log.info("Using teleport method: " + teleport);
             if (teleport.trigger()) {
@@ -389,6 +390,7 @@ public class WalkerEngine {
                         () -> startPosition.distanceTo(new RSTile(PPlayer.location())) < 10 ?
                                 WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
             }
+            log.info("Trigger failed");
             return false;
         }
         return true;

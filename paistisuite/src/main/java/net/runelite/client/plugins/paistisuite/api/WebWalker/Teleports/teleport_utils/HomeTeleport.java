@@ -41,8 +41,8 @@ public enum HomeTeleport {
         if (Teleport.castSpell(this.getSpellName(), "Cast")) {
             if (WaitFor.condition(1800, () ->
                     PPlayer.getPlayer().getAnimation() != -1 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS) {
-                return WaitFor.condition(15000, () -> !PPlayer.getWorldLocation().equals(start)
-                        ? WaitFor.Return.SUCCESS : PPlayer.getPlayer().getHealthRatio() == -1 ? WaitFor.Return.IGNORE : WaitFor.Return.FAIL) != WaitFor.Return.SUCCESS;
+                return WaitFor.condition(16000, () -> !PPlayer.getWorldLocation().equals(start)
+                        ? WaitFor.Return.SUCCESS : PPlayer.getPlayer().getHealthRatio() == -1 ? WaitFor.Return.IGNORE : WaitFor.Return.FAIL) == WaitFor.Return.SUCCESS;
             }
         }
         return false;

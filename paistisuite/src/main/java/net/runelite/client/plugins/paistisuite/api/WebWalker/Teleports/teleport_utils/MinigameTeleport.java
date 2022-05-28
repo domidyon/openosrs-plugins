@@ -98,8 +98,8 @@ public enum MinigameTeleport {
         }, "Minigame Teleport"))) {
             if (WaitFor.condition(1800, () ->
                     PPlayer.getPlayer().getAnimation() != -1 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS) {
-                return WaitFor.condition(15000, () -> !PPlayer.getWorldLocation().equals(start)
-                        ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) != WaitFor.Return.SUCCESS;
+                return WaitFor.condition(16000, () -> !PPlayer.getWorldLocation().equals(start)
+                        ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
             }
         }
         return false;

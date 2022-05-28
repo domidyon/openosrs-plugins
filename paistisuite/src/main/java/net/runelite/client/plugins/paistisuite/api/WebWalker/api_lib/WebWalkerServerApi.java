@@ -203,6 +203,8 @@ public class WebWalkerServerApi{
         HttpURLConnection connection = (isTestMode ? (HttpURLConnection) myurl.openConnection() : (HttpsURLConnection) myurl.openConnection());
         connection.setDoOutput(true);
         connection.setDoInput(true);
+        connection.setConnectTimeout(10000);
+        connection.setReadTimeout(30000);
 
         connection.setRequestProperty("Method", "POST");
         connection.setRequestProperty("Content-Type", "application/json");

@@ -16,8 +16,7 @@ public interface PaistiSuiteConfig extends Config {
             position = 110,
             hidden = false
     )
-    default String daxApiKey()
-    {
+    default String daxApiKey() {
         return "sub_DPjXXzL5DeSiPf";
     }
 
@@ -28,8 +27,17 @@ public interface PaistiSuiteConfig extends Config {
             position = 135,
             hidden = false
     )
-    default String daxSecretKey()
-    {
+    default String daxSecretKey() {
         return "PUBLIC-KEY";
+    }
+
+    @ConfigItem(
+            keyName = "allowTithe",
+            name = "Allow Tithe Farm",
+            description = "Enable to allow Tithe Farm Minigame Tele.",
+            position = 143
+    )
+    default boolean allowTithe() {
+        return false;
     }
 }

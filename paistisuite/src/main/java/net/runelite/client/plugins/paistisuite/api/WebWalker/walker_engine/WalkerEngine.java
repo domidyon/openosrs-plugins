@@ -2,7 +2,6 @@ package net.runelite.client.plugins.paistisuite.api.WebWalker.walker_engine;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.plugins.paistisuite.api.PBanking;
@@ -33,7 +32,6 @@ import java.util.stream.Collectors;
 @Singleton
 public class WalkerEngine {
     private static WalkerEngine walkerEngine;
-    private static Client client = PUtils.getClient();
     private int attemptsForAction;
     private int clickAfterSteps = (int) PUtils.randomNormal(5, 10);
     private final int failThreshold;
@@ -120,7 +118,7 @@ public class WalkerEngine {
                     return false;
                 }
 
-                GameState gameState = client.getGameState();
+                GameState gameState = PUtils.getClient().getGameState();
                 if (gameState != GameState.LOGGED_IN && gameState != GameState.LOADING) {
                     return false;
                 }
@@ -242,6 +240,7 @@ public class WalkerEngine {
                                 switch (conditionContainer.trigger()) {
                                     case EXIT_OUT_WALKER_SUCCESS:
                                     case EXIT_OUT_WALKER_FAIL:
+                                        successfulAttempt();
                                         return WaitFor.Return.SUCCESS;
                                 }
 
@@ -271,6 +270,7 @@ public class WalkerEngine {
                                 int indexNextDestination = path.indexOf(furthestReachable.getDestination().getRSTile());
                                 if (indexNextDestination - indexCurrentDestination > clickAfterSteps || indexCurrentDestination - indexCurrentPosition < 5) {
                                     clickAfterSteps = (int) PUtils.randomNormal(5, 10);
+                                    successfulAttempt();
                                     return WaitFor.Return.SUCCESS;
                                 }
                                 if (System.currentTimeMillis() > offsetWalkingTimeout && !PPlayer.isMoving()) {
@@ -384,10 +384,12 @@ public class WalkerEngine {
             if (!teleport.getRequirement().satisfies()) continue;
             if (teleport.isAtTeleportSpot(startPosition) && !teleport.isAtTeleportSpot(playerPosition)) {
                 log.info("Using teleport method: " + teleport);
-                teleport.trigger();
-                return WaitFor.condition(PUtils.random(3000, 20000),
-                        () -> startPosition.distanceTo(new RSTile(PPlayer.location())) < 10 ?
-                                WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+                if (teleport.trigger()) {
+                    return WaitFor.condition(PUtils.random(5000, 20000),
+                            () -> startPosition.distanceTo(new RSTile(PPlayer.location())) < 10 ?
+                                    WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS;
+                }
+                return false;
             }
         }
         return true;

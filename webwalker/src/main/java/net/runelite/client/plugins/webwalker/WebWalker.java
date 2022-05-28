@@ -20,10 +20,7 @@ import net.runelite.client.config.ConfigManager;
 import net.runelite.client.config.RuneLiteConfig;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
-import net.runelite.client.plugins.OPRSExternalPluginManager;
-import net.runelite.client.plugins.PluginDependency;
-import net.runelite.client.plugins.PluginDescriptor;
-import net.runelite.client.plugins.PluginManager;
+import net.runelite.client.plugins.*;
 import net.runelite.client.plugins.paistisuite.PScript;
 import net.runelite.client.plugins.paistisuite.PaistiSuite;
 import net.runelite.client.plugins.paistisuite.api.PMenu;
@@ -45,7 +42,6 @@ import net.runelite.client.ui.overlay.worldmap.WorldMapPoint;
 import net.runelite.client.ui.overlay.worldmap.WorldMapPointManager;
 import net.runelite.client.util.ColorUtil;
 import net.runelite.http.api.RuneLiteAPI;
-import net.runelite.rs.api.RSClient;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -55,6 +51,7 @@ import org.pf4j.update.PluginInfo;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -399,8 +396,25 @@ public class WebWalker extends PScript {
             return;
         }
         if (!isPluginEnabled("paistisuite")) {
-            sendGameMessage("WebWalker - PaistiSuite Plugin needs to be Enabled");
-            return;
+            sendGameMessage("WebWalker - PaistiSuite Plugin was disabled, attempting to enable now");
+            boolean found = false;
+            for (Plugin plugin : pluginManager.getPlugins()) {
+                if (plugin.getName().equals("PaistiSuite")) {
+                    found = true;
+                    SwingUtilities.invokeLater(() -> {
+                        try {
+                            pluginManager.setPluginEnabled(plugin, true);
+                            pluginManager.startPlugin(plugin);
+                        } catch (PluginInstantiationException ignored) {
+                        }
+                    });
+                    break;
+                }
+            }
+            if (!found) {
+                sendGameMessage("WebWalker - Couldn't find PaistiSuite Plugin to enable");
+                return;
+            }
         }
         try {
             HttpUrl pluginJson = HttpUrl.parse("https://raw.githubusercontent.com/rokaHakor/openosrs-plugins/master/plugins.json");
@@ -483,21 +497,12 @@ public class WebWalker extends PScript {
                 }
             }
         }
-        if (event.getKey().equals("teleportSpellCost")) {
-            Teleport.TeleportType.TELEPORT_SPELL.setMoveCost(config.teleportSpellCost());
-        }
-        if (event.getKey().equals("teleportScrollCost")) {
-            Teleport.TeleportType.TELEPORT_SCROLL.setMoveCost(config.teleportScrollCost());
-        }
-        if (event.getKey().equals("nonrechargableTeleCost")) {
-            Teleport.TeleportType.NONRECHARABLE_TELE.setMoveCost(config.nonrechargableTeleCost());
-        }
-        if (event.getKey().equals("rechargableTeleCost")) {
-            Teleport.TeleportType.RECHARGABLE_TELE.setMoveCost(config.rechargableTeleCost());
-        }
-        if (event.getKey().equals("unlimitedTeleportCost")) {
-            Teleport.TeleportType.UNLIMITED_TELE.setMoveCost(config.unlimitedTeleportCost());
-        }
+        Teleport.TeleportType.TELEPORT_SPELL.setMoveCost(config.teleportSpellCost());
+        Teleport.TeleportType.TELEPORT_SCROLL.setMoveCost(config.teleportScrollCost());
+        Teleport.TeleportType.NONRECHARABLE_TELE.setMoveCost(config.nonrechargableTeleCost());
+        Teleport.TeleportType.RECHARGABLE_TELE.setMoveCost(config.rechargableTeleCost());
+        Teleport.TeleportType.UNLIMITED_TELE.setMoveCost(config.unlimitedTeleportCost());
+
     }
 
     @Subscribe
@@ -562,6 +567,8 @@ public class WebWalker extends PScript {
                 return config.catSlayer().getWorldPoint();
             case MISC:
                 return config.catMisc().getWorldPoint();
+            case CLUE:
+                sendGameMessage("Webwalker - This feature will be enabled after Satoshi Oda has recieved enough donations :)");
         }
 
         return null;

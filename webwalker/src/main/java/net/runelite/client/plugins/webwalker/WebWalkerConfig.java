@@ -330,10 +330,21 @@ public interface WebWalkerConfig extends Config {
     }
 
     @ConfigItem(
+            keyName = "channeledTeleportCost",
+            name = "Channeled Teleport",
+            description = "Sets the Movecost for channel use teleports.(Minigame)",
+            position = 151,
+            section = teleportMovecosts
+    )
+    default int channeledTeleportCost() {
+        return 80;
+    }
+
+    @ConfigItem(
             keyName = "startButton",
             name = "Start",
             description = "Start walker",
-            position = 151
+            position = 153
     )
     default Button startButton() {
         return new Button();
@@ -343,7 +354,7 @@ public interface WebWalkerConfig extends Config {
             keyName = "stopButton",
             name = "Stop",
             description = "Stop walker",
-            position = 151
+            position = 154
     )
     default Button stopButton() {
         return new Button();

@@ -8,9 +8,7 @@ import net.runelite.api.MenuAction;
 import net.runelite.api.util.Text;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.plugins.paistisuite.api.*;
-import net.runelite.client.plugins.paistisuite.api.WebWalker.Teleports.teleport_utils.TeleportConstants;
-import net.runelite.client.plugins.paistisuite.api.WebWalker.Teleports.teleport_utils.TeleportLimit;
-import net.runelite.client.plugins.paistisuite.api.WebWalker.Teleports.teleport_utils.TeleportScrolls;
+import net.runelite.client.plugins.paistisuite.api.WebWalker.Teleports.teleport_utils.*;
 import net.runelite.client.plugins.paistisuite.api.WebWalker.api_lib.models.Requirement;
 import net.runelite.client.plugins.paistisuite.api.WebWalker.shared.helpers.RSItemHelper;
 import net.runelite.client.plugins.paistisuite.api.WebWalker.shared.helpers.magic.RuneElement;
@@ -532,6 +530,42 @@ public enum Teleport {
             () -> RSItemHelper.click("Salve graveyard t.*", "Break")
     ),
 
+    FENKENSTRAINS_CASTLE_TAB(
+            TeleportType.TELEPORT_SPELL, new RSTile(3547, 3528, 0),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && PInventory.getCount("Fenkenstrain's castle teleport") > 0,
+            () -> RSItemHelper.click("Fenkenstrain's castle t.*", "Break")
+    ),
+
+    BARROWS_TAB(
+            TeleportType.TELEPORT_SPELL, new RSTile(3565, 3314, 0),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && PInventory.getCount("Barrows teleport") > 0,
+            () -> RSItemHelper.click("Barrows t.*", "Break")
+    ),
+
+    ARCEUUS_LIBRARY_TAB(
+            TeleportType.TELEPORT_SPELL, new RSTile(1632, 3838, 0),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && PInventory.getCount("Arceuus library teleport") > 0,
+            () -> RSItemHelper.click("Arceuus library t.*", "Break")
+    ),
+
+    BATTLEFRONT_TAB(
+            TeleportType.TELEPORT_SPELL, new RSTile(1349, 3738, 0),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && PInventory.getCount("Battlefront teleport") > 0,
+            () -> RSItemHelper.click("Battlefront t.*", "Break")
+    ),
+
+    DRAYNOR_MANOR_TAB(
+            TeleportType.TELEPORT_SPELL, new RSTile(3109, 3352, 0),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && PInventory.getCount("Draynor manor teleport") > 0,
+            () -> RSItemHelper.click("Draynor manor t.*", "Break")
+    ),
+
+    MIND_ALTAR_TAB(
+            TeleportType.TELEPORT_SPELL, new RSTile(2980, 3510, 0),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && PInventory.getCount("Mind altar teleport") > 0,
+            () -> RSItemHelper.click("Mind altar t.*", "Break")
+    ),
+
     ENCHANTED_LYRE_RELLEKA(
             TeleportType.RECHARGABLE_TELE, new RSTile(2661, 3465, 0),
             () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && HasItems.ENCHANTED_LYRE_FILTER.getHasItem().checkHasItem(),
@@ -577,13 +611,115 @@ public enum Teleport {
     MORY_LEGS3(
             TeleportType.UNLIMITED_TELE, new RSTile(3427, 2926, 0),
             () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && HasItems.MORY_LEGS3.getHasItem().checkHasItem(),
-            () -> {
-                if (RSItemHelper.click(Filters.Items.idEquals(Set.of(ItemID.MORYTANIA_LEGS_3, ItemID.MORYTANIA_LEGS_4)), "Teleport")) {
-                    PUtils.sleep(3000);
-                    return true;
-                }
-                return false;
-            }
+            () -> castSpell("Lumbridge Teleport", "Cast")
+    ),
+
+    LUMBRIDGE_HOME_TELEPORT(
+            TeleportType.CHANNELED_TELE, HomeTeleport.LUMBRIDGE_TELEPORT.getTeleportTile(),
+            () -> HomeTeleport.LUMBRIDGE_TELEPORT.getCheck().getAsBoolean(),
+            HomeTeleport.LUMBRIDGE_TELEPORT::homeTeleport
+    ),
+
+    ARCEUUS_HOME_TELEPORT(
+            TeleportType.CHANNELED_TELE, HomeTeleport.ARCEUUS_TELEPORT.getTeleportTile(),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && HomeTeleport.ARCEUUS_TELEPORT.getCheck().getAsBoolean(),
+            HomeTeleport.ARCEUUS_TELEPORT::homeTeleport
+    ),
+
+    EDGEVILLE_HOME_TELEPORT(
+            TeleportType.CHANNELED_TELE, HomeTeleport.EDGEVILLE_TELEPORT.getTeleportTile(),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && HomeTeleport.EDGEVILLE_TELEPORT.getCheck().getAsBoolean(),
+            HomeTeleport.EDGEVILLE_TELEPORT::homeTeleport
+    ),
+
+    LUNAR_HOME_TELEPORT(
+            TeleportType.CHANNELED_TELE, HomeTeleport.LUNAR_TELEPORT.getTeleportTile(),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && HomeTeleport.LUNAR_TELEPORT.getCheck().getAsBoolean(),
+            HomeTeleport.LUNAR_TELEPORT::homeTeleport
+    ),
+
+    BARB_ASS_TELEPORT(
+            TeleportType.CHANNELED_TELE, MinigameTeleport.BARB_ASS.getTeleportTile(),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && MinigameTeleport.BARB_ASS.getCheck().getAsBoolean(),
+            MinigameTeleport.BARB_ASS::minigameTeleport
+    ),
+
+    BLAST_FURNACE_TELEPORT(
+            TeleportType.CHANNELED_TELE, MinigameTeleport.BLAST_FURNACE.getTeleportTile(),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && MinigameTeleport.BLAST_FURNACE.getCheck().getAsBoolean(),
+            MinigameTeleport.BLAST_FURNACE::minigameTeleport
+    ),
+
+    BURTHROPE_GAMES_TELEPORT(
+            TeleportType.CHANNELED_TELE, MinigameTeleport.BURTHROPE_GAMES.getTeleportTile(),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && MinigameTeleport.BURTHROPE_GAMES.getCheck().getAsBoolean(),
+            MinigameTeleport.BURTHROPE_GAMES::minigameTeleport
+    ),
+
+    CASTLE_WARS_TELEPORT(
+            TeleportType.CHANNELED_TELE, MinigameTeleport.CASTLE_WARS.getTeleportTile(),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && MinigameTeleport.CASTLE_WARS.getCheck().getAsBoolean(),
+            MinigameTeleport.CASTLE_WARS::minigameTeleport
+    ),
+
+    CLAN_WARS_TELEPORT(
+            TeleportType.CHANNELED_TELE, MinigameTeleport.CLAN_WARS.getTeleportTile(),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && MinigameTeleport.CLAN_WARS.getCheck().getAsBoolean(),
+            MinigameTeleport.CLAN_WARS::minigameTeleport
+    ),
+
+    FISHING_TRAWLER_TELEPORT(
+            TeleportType.CHANNELED_TELE, MinigameTeleport.FISHING_TRAWLER.getTeleportTile(),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && MinigameTeleport.FISHING_TRAWLER.getCheck().getAsBoolean(),
+            MinigameTeleport.FISHING_TRAWLER::minigameTeleport
+    ),
+
+    LMS_TELEPORT(
+            TeleportType.CHANNELED_TELE, MinigameTeleport.LMS.getTeleportTile(),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && MinigameTeleport.LMS.getCheck().getAsBoolean(),
+            MinigameTeleport.LMS::minigameTeleport
+    ),
+
+    NMZ_TELEPORT(
+            TeleportType.CHANNELED_TELE, MinigameTeleport.NMZ.getTeleportTile(),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && MinigameTeleport.NMZ.getCheck().getAsBoolean(),
+            MinigameTeleport.NMZ::minigameTeleport
+    ),
+
+    PEST_CONTROL_MINI_TELEPORT(
+            TeleportType.CHANNELED_TELE, MinigameTeleport.PEST_CONTROL.getTeleportTile(),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && MinigameTeleport.PEST_CONTROL.getCheck().getAsBoolean(),
+            MinigameTeleport.PEST_CONTROL::minigameTeleport
+    ),
+
+    RAT_PITS_VARROCK_TELEPORT(
+            TeleportType.CHANNELED_TELE, MinigameTeleport.RAT_PITS_VARROCK.getTeleportTile(),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && MinigameTeleport.RAT_PITS_VARROCK.getCheck().getAsBoolean(),
+            MinigameTeleport.RAT_PITS_VARROCK::minigameTeleport
+    ),
+
+    SHADES_OF_MORTON_TELEPORT(
+            TeleportType.CHANNELED_TELE, MinigameTeleport.SHADES_OF_MORTON.getTeleportTile(),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && MinigameTeleport.SHADES_OF_MORTON.getCheck().getAsBoolean(),
+            MinigameTeleport.SHADES_OF_MORTON::minigameTeleport
+    ),
+
+    TITHE_FARM_TELEPORT(
+            TeleportType.CHANNELED_TELE, MinigameTeleport.TITHE_FARM.getTeleportTile(),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && MinigameTeleport.TITHE_FARM.getCheck().getAsBoolean(),
+            MinigameTeleport.TITHE_FARM::minigameTeleport
+    ),
+
+    TROUBLE_BREWING_TELEPORT(
+            TeleportType.CHANNELED_TELE, MinigameTeleport.TROUBLE_BREWING.getTeleportTile(),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && MinigameTeleport.TROUBLE_BREWING.getCheck().getAsBoolean(),
+            MinigameTeleport.TROUBLE_BREWING::minigameTeleport
+    ),
+
+    TZHAAR_FIT_PIT_TELEPORT(
+            TeleportType.CHANNELED_TELE, MinigameTeleport.TZHAAR_FIT_PIT.getTeleportTile(),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && MinigameTeleport.TZHAAR_FIT_PIT.getCheck().getAsBoolean(),
+            MinigameTeleport.TZHAAR_FIT_PIT::minigameTeleport
     );//TODO add missing teleports
 
     public enum TeleportType {
@@ -591,7 +727,8 @@ public enum Teleport {
         TELEPORT_SCROLL(100),
         NONRECHARABLE_TELE(80),
         RECHARGABLE_TELE(50),
-        UNLIMITED_TELE(10);
+        UNLIMITED_TELE(10),
+        CHANNELED_TELE(80);
 
         private int movecost;
 
@@ -724,10 +861,6 @@ public enum Teleport {
     private final Action action;
     private final TeleportLimit teleportLimit;
 
-    private boolean canUse = true;
-
-    private int failedAttempts = 0;
-
     Teleport(TeleportType teleportType, RSTile location, Requirement requirement, Action action) {
         this.teleportType = teleportType;
         this.location = location;
@@ -769,15 +902,7 @@ public enum Teleport {
     }
 
     public boolean trigger() {
-        boolean value = this.action.trigger();
-        if (!value) {
-            failedAttempts++;
-            if (failedAttempts > 3) {
-                canUse = false;
-            }
-        }
-        failedAttempts = 0;
-        return value;
+        return this.action.trigger();
     }
 
     public boolean isAtTeleportSpot(RSTile tile) {
@@ -795,7 +920,7 @@ public enum Teleport {
     }
 
     public static void checkAllItems() {
-        log.info("Start: " + System.currentTimeMillis());
+        //log.info("Start: " + System.currentTimeMillis());
         CachedBooleans.resetCachedBooleans();
         SpellBook.resetCurrenSpellBook();
         RunePouch.resetHasPouch();
@@ -824,20 +949,21 @@ public enum Teleport {
                 }
             }
         }
-        log.info("Checked Items: " + System.currentTimeMillis());
     }
 
     public static List<RSTile> getValidStartingRSTiles() {
-        checkAllItems();
-        List<RSTile> RSTiles = new ArrayList<>();
-        for (Teleport teleport : values()) {
-            if (blacklist.contains(teleport) || !teleport.teleportLimit.canCast() ||
-                    !teleport.canUse || !teleport.requirement.satisfies()) continue;
-            //log.info("Teleport: " + teleport.name() + ", " + System.currentTimeMillis());
-            RSTiles.add(teleport.location);
-        }
-        //log.info("Finish: " + System.currentTimeMillis());
-        return RSTiles;
+        return PUtils.clientOnly(() -> {
+            checkAllItems();
+            List<RSTile> RSTiles = new ArrayList<>();
+            for (Teleport teleport : values()) {
+                if (blacklist.contains(teleport) || !teleport.teleportLimit.canCast()
+                        || !teleport.requirement.satisfies()) continue;
+                //log.info("Teleport: " + teleport.name() + ", " + System.currentTimeMillis());
+                RSTiles.add(teleport.location);
+            }
+            //log.info("Finish: " + System.currentTimeMillis());
+            return RSTiles;
+        }, "Teleport Tiles");
     }
 
     private interface Action {

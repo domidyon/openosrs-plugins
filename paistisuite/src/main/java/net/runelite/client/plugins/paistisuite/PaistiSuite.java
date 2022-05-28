@@ -18,6 +18,7 @@ import net.runelite.client.game.WorldService;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.paistisuite.api.PGroundItems;
+import net.runelite.client.plugins.paistisuite.api.WebWalker.Teleports.teleport_utils.MinigameTeleport;
 import net.runelite.client.plugins.paistisuite.api.WebWalker.api_lib.models.DaxCredentials;
 import net.runelite.client.plugins.paistisuite.api.WebWalker.api_lib.models.DaxCredentialsProvider;
 import net.runelite.client.plugins.paistisuite.api.WebWalker.walker_engine.navigation_utils.SpiritTreeManager;
@@ -108,6 +109,7 @@ public class PaistiSuite extends Plugin {
 
         client.setHideDisconnect(true);
         updateDaxCredProvider();
+        updateMinigameTele();
         instance = this;
         if (clientExecutor != null) clientExecutor.clearAllTasks();
     }
@@ -128,6 +130,10 @@ public class PaistiSuite extends Plugin {
             daxKey = config.daxApiKey();
             daxSecret = config.daxSecretKey();
         }
+    }
+
+    private void updateMinigameTele() {
+        MinigameTeleport.TITHE_FARM.setAllowed(config.allowTithe());
     }
 
     @Subscribe
@@ -198,6 +204,7 @@ public class PaistiSuite extends Plugin {
     private void onConfigChanged(ConfigChanged event) {
         if (!event.getGroup().equals(PaistiSuite.CONFIG_GROUP)) return;
         updateDaxCredProvider();
+        updateMinigameTele();
 
         if (SpiritTreeManager.getActiveSpiritTrees(client).isEmpty() && event.getKey().equals(PaistiSuiteConfig.SPIRIT_TREES)) {
             spiritTreeManager.loadSpiritTrees();

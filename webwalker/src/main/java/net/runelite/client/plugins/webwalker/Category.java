@@ -12,6 +12,7 @@ public enum Category
 {
 	BANKS("Banks"),
 	QUEST("Quest"),
+	CLUE("Clue"),
 	BARCRAWL("Barcrawl"),
 	CITIES("Cities"),
 	FARMING("Farming"),

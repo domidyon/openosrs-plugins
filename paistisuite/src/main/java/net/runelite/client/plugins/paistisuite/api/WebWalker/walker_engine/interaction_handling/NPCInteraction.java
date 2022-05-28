@@ -79,7 +79,9 @@ public class NPCInteraction {
             return false;
         }
         for(String s:npc.getTransformedComposition().getActions()){
-            log.info(s);
+            if(s != null) {
+                log.info(s);
+            }
         }
         return InteractionHelper.click(npc, options);
     }

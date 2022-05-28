@@ -27,6 +27,8 @@ public class IOHelper {
         HttpURLConnection connection = (HttpsURLConnection) myurl.openConnection();
         connection.setDoOutput(true);
         connection.setDoInput(true);
+        connection.setConnectTimeout(10000);
+        connection.setReadTimeout(30000);
 
         connection.setRequestProperty("Method", "GET");
         connection.setRequestProperty("Content-Type", "application/json");
@@ -50,6 +52,8 @@ public class IOHelper {
         HttpURLConnection connection = (HttpsURLConnection) myurl.openConnection();
         connection.setDoOutput(true);
         connection.setDoInput(true);
+        connection.setConnectTimeout(10000);
+        connection.setReadTimeout(30000);
 
         connection.setRequestProperty("Method", "POST");
         connection.setRequestProperty("Content-Type", "application/json");

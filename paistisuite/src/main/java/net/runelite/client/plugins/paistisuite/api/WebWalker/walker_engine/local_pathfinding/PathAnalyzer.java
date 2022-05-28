@@ -73,7 +73,7 @@ public class PathAnalyzer {
                 if (next != null) {
                     return new DestinationDetails(PathState.OBJECT_BLOCKING, current, next);
                 }
-                return new DestinationDetails(PathState.OBJECT_BLOCKING, current, nextNode.getX(), nextNode.getY(), nextNode.getPlane());
+                return new DestinationDetails(PathState.OBJECT_BLOCKING, current, nextNode.getX(), nextNode.getY(), nextNode.getPlane());//TODO isnt actually blocking maybe
             }
             if (!nextNode.isInMinimap()){ //Minimap radius
                 furthestReachable = current;

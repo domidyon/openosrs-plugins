@@ -12,7 +12,8 @@ import static net.runelite.client.plugins.paistisuite.api.WebWalker.walker_engin
 
 public class Reachable {
 
-    private RSTile[][] map;
+    private final RSTile homeTile;
+    private final RSTile[][] map;
 
     /**
      * Generates reachable map from player position
@@ -22,12 +23,16 @@ public class Reachable {
     }
 
     private Reachable(RSTile homeTile) {
-        map = generateMap(homeTile != null ? homeTile : new RSTile(PPlayer.location()));
+        if (homeTile == null) {
+            homeTile = new RSTile(PPlayer.getWorldLocation());
+        }
+        this.homeTile = homeTile;
+        map = generateMap(homeTile);
     }
 
     public boolean canReach(RSTile position) {
         position = position.toWorldTile(PUtils.getClient());
-        RSTile playerPosition = new RSTile(PPlayer.location());
+        RSTile playerPosition = homeTile.toWorldTile(PUtils.getClient());
         if (playerPosition.getX() == position.getX() && playerPosition.getY() == position.getY()) {
             return true;
         }
@@ -39,7 +44,7 @@ public class Reachable {
     }
 
     public boolean canReach(int x, int y) {
-        RSTile playerPosition = new RSTile(PPlayer.location());
+        RSTile playerPosition = homeTile;
         if (playerPosition.getX() == x && playerPosition.getY() == y) {
             return true;
         }
@@ -50,7 +55,7 @@ public class Reachable {
     public RSTile closestTile(Collection<RSTile> tiles) {
         RSTile closest = null;
         double closestDistance = Integer.MAX_VALUE;
-        RSTile playerPosition = new RSTile(PPlayer.location());
+        RSTile playerPosition = homeTile;
         for (RSTile positionable : tiles) {
             double distance = playerPosition.distanceToDouble(positionable);
             if (distance < closestDistance) {
@@ -146,7 +151,7 @@ public class Reachable {
      */
     public ArrayList<RSTile> getPath(int x, int y) {
         ArrayList<RSTile> path = new ArrayList<>();
-        RSTile playerPos = new RSTile(PPlayer.location()).toLocalTile(PUtils.getClient());
+        RSTile playerPos = homeTile.toLocalTile(PUtils.getClient());
         if (x == playerPos.getX() && y == playerPos.getY()) {
             return path;
         }
@@ -174,7 +179,7 @@ public class Reachable {
     public int getDistance(RSTile localPos) {
         RSTile position = convertToLocal(localPos.getX(), localPos.getY());
         int x = position.getX(), y = position.getY();
-        RSTile playerPos = new RSTile(PPlayer.location()).toLocalTile(PUtils.getClient());
+        RSTile playerPos = homeTile.toLocalTile(PUtils.getClient());
         if (x == playerPos.getX() && y == playerPos.getY()) {
             return 0;
         }

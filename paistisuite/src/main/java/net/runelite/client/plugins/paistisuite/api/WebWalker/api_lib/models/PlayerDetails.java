@@ -29,34 +29,37 @@ public class PlayerDetails {
                 .collect(Collectors.toList());
 
         List<IntPair> settings = Stream.of(10, 11, 17, 32, 63, 68, 71, 101, 111, 116, 131, 144, 145, 150, 165, 176,
-            179, 212, 273, 299, 302, 307, 314, 335, 347, 351, 365, 371, 387, 399, 425, 437, 440, 482, 622, 655, 671, 705, 794, 810,
-            869, 896, 964, 970, 1630, 1671, 1672)
-                                       .map(value -> new IntPair(value, PVars.getSetting(value))).distinct().collect(Collectors.toList());
+                        179, 212, 273, 299, 302, 307, 314, 335, 347, 351, 365, 371, 387, 399, 425, 437, 440, 482, 622, 655, 671, 705, 794, 810,
+                        869, 896, 964, 970, 1630, 1671, 1672)
+                .map(value -> new IntPair(value, PVars.getSetting(value))).distinct().collect(Collectors.toList());
 
         List<IntPair> varbit = Arrays.stream(new int[]{
-            192,
-            199,
-            357,
-            2310,
-            2328,
-            3534,
-            3741,
-            4538,
-            4566,
-            4885,
-            4895,
-            4897,
-            5087,
-            5088,
-            5089,
-            5090,
-            5810,
-            6104,
-            7255,
-            9016
-        })
+                        192,
+                        199,
+                        357,
+                        2310,
+                        2328,
+                        3534,
+                        3741,
+                        4538,
+                        4566,
+                        4885,
+                        4895,
+                        4897,
+                        5027,
+                        5087,
+                        5088,
+                        5089,
+                        5090,
+                        5800, //fossil island- museum camp bank has been built if this is 1
+                        5810,
+                        6104,
+                        7255,
+                        9016,
+                        10150, //we've paid 1m to Andras for free boat rides to Slepe if this is 1
+                })
                 .mapToObj(value -> new IntPair(value, RSVarBit.get(value).getValue())).distinct().collect(
-				        Collectors.toList());
+                        Collectors.toList());
 
         return new PlayerDetails(
                 PSkills.getActualLevel(Skill.ATTACK),
@@ -129,28 +132,28 @@ public class PlayerDetails {
 
     public int farming;
 
-    
+
     public int runecrafting;
 
-    
+
     public int hunter;
 
-    
+
     public int construction;
 
-    
+
     public List<IntPair> setting;
 
-    
+
     public List<IntPair> varbit;
 
-    
+
     public boolean member;
 
-    
+
     public List<IntPair> equipment;
 
-    
+
     public List<IntPair> inventory;
 
     public PlayerDetails() {
@@ -304,4 +307,33 @@ public class PlayerDetails {
         return new Gson().toJsonTree(this);
     }
 
+    public enum UserVars {
+        SPIRIT_TREE_PORT_SARIM(0),
+        SPIRIT_TREE_BRIMHAVEN(1),
+        SPIRIT_TREE_ETCETERIA(2),
+        SPIRIT_TREE_HOSIDIUS(3),
+        SPIRIT_TREE_FARMING_GUILD(4),
+        MYCELIUM_HOUSE_ON_THE_HILL(5),
+        MYCELIUM_VERDANT_VALLEY(6),
+        MYCELIUM_STICKY_SWAMP(7),
+        MYCELIUM_MUSHROOM_MEADOW(8);
+        boolean canUse = false;
+        int id;
+
+        UserVars(int id) {
+            this.id = id;
+        }
+
+        public boolean canUse() {
+            return canUse;
+        }
+
+        public void setCanUse(boolean value) {
+            this.canUse = value;
+        }
+
+        public int getId() {
+            return id;
+        }
+    }
 }

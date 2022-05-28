@@ -203,6 +203,18 @@ public class PathObjectHandler {
 
             }
         }),
+        FOSSIL_ISLAND_LADDER_DOWN_WEST("Ladder", "Climb Down", new WorldPoint(3730, 3831, 1), new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return destinationDetails.getNextTile() != null && destinationDetails.getNextTile().getRSTile().equals(new RSTile(3728, 3831, 0));
+            }
+        }),
+        FOSSIL_ISLAND_LADDER_DOWN_EAST("Ladder", "Climb Down", new WorldPoint(3745, 3831, 1), new SpecialCondition() {
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return destinationDetails.getNextTile() != null && destinationDetails.getNextTile().getRSTile().equals(new RSTile(3747, 3831, 0));
+            }
+        }),
         FALADOR_COWS_WIDE_GATE("Gate", "Open", null, new SpecialCondition() {
             @Override
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
@@ -215,6 +227,13 @@ public class PathObjectHandler {
             boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
                 PTileObject gate = PObjects.findObject(Filters.Objects.idEquals(1563).and(g -> g.getWorldLocation().distanceTo2D(new WorldPoint(3031, 3314, 0)) < 5));
                 return gate != null && gate.getWorldLocation().distanceTo2D(destinationDetails.getDestination().getRSTile().toWorldPoint()) < 4;
+            }
+        }),
+        HAM_JAIL("Door","Pick-lock",new WorldPoint(3183, 9611, 0), new PathObjectHandler.SpecialCondition() {
+
+            @Override
+            boolean isSpecialLocation(PathAnalyzer.DestinationDetails destinationDetails) {
+                return destinationDetails.getNextTile() != null && destinationDetails.getNextTile().getRSTile().equals(new RSTile(3182, 9611, 0));
             }
         });
         private String name, action;
@@ -403,13 +422,14 @@ public class PathObjectHandler {
                     }
                     break;
                 case ARDY_DOOR_LOCK_SIDE:
-                case YANILLE_DOOR_LOCK_SIDE:
                     for (int i = 0; i < PUtils.random(15, 25); i++) {
                         if (!clickOnObject(objDefPair, destinationDetails, specialObject.getAction())) {
                             continue;
                         }
                         if (PPlayer.location().distanceTo2D(specialObject.getLocation()) > 1) {
                             WaitFor.condition(PUtils.random(3000, 4000), () -> PPlayer.location().distanceTo2D(specialObject.getLocation()) <= 1 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                        } else {
+                            WaitFor.milliseconds(400, 1200);
                         }
                         if (PPlayer.location().equals(new WorldPoint(2564, 3356, 0))) {
                             successfulClick = true;
@@ -417,12 +437,39 @@ public class PathObjectHandler {
                         }
                     }
                     break;
+                case YANILLE_DOOR_LOCK_SIDE:
+                    for (int i = 0; i < PUtils.random(15, 25); i++) {
+                        if (!clickOnObject(objDefPair, destinationDetails, specialObject.getAction())) {
+                            continue;
+                        }
+                        if (PPlayer.location().distanceTo2D(specialObject.getLocation()) > 1) {
+                            WaitFor.condition(PUtils.random(3000, 4000), () -> PPlayer.location().distanceTo2D(specialObject.getLocation()) <= 1 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                        } else {
+                            WaitFor.milliseconds(400, 1200);
+                        }
+                        if (PPlayer.location().equals(new WorldPoint(2601, 9482, 0))) {
+                            successfulClick = true;
+                            break;
+                        }
+                    }
+                    break;
                 case VARROCK_UNDERWALL_TUNNEL:
+                    if (!clickOnObject(objDefPair, destinationDetails, specialObject.getAction())) {
+                        return false;
+                    }
+                    successfulClick = true;
+                    WaitFor.condition(10000, () ->
+                            SpecialObject.EDGEVILLE_UNDERWALL_TUNNEL.getLocation().equals(PPlayer.location()) ?
+                                    WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
+                    break;
                 case EDGEVILLE_UNDERWALL_TUNNEL:
                     if (!clickOnObject(objDefPair, destinationDetails, specialObject.getAction())) {
                         return false;
                     }
                     successfulClick = true;
+                    WaitFor.condition(10000, () ->
+                            SpecialObject.VARROCK_UNDERWALL_TUNNEL.getLocation().equals(PPlayer.location()) ?
+                                    WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
                     break;
                 case BRINE_RAT_CAVE_BOULDER:
                     NPC boulder = new NPCQuery()
@@ -441,6 +488,14 @@ public class PathObjectHandler {
                                         WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE) == WaitFor.Return.SUCCESS) {
                             WaitFor.milliseconds(3500, 6000);
                         }
+                    }
+                case FOSSIL_ISLAND_LADDER_DOWN_WEST:
+                case FOSSIL_ISLAND_LADDER_DOWN_EAST:
+                    PTileObject ladder = PObjects.findObject(Filters.Objects.nameEquals("Ladder").and(Filters.Objects.actionsContains("Climb Down")));
+                    if (ladder == null)
+                        return false;
+                    if (InteractionHelper.click(ladder, "Climb Down")) {
+                        WaitFor.condition(10000, () -> PPlayer.getWorldLocation().getPlane() == 0 ? WaitFor.Return.SUCCESS : WaitFor.Return.IGNORE);
                     }
                     break;
                 default:

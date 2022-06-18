@@ -43,6 +43,7 @@ public class WearableItemTeleport {
     public static final Predicate<PItem> EXPLORERS_RING_FILTER = Filters.Items.idEquals(ImmutableSet.of(ItemID.EXPLORERS_RING_2, ItemID.EXPLORERS_RING_3, ItemID.EXPLORERS_RING_4));
     public static final Predicate<PItem> QUEST_CAPE_FILTER = Filters.Items.processedIdEquals(ItemID.QUEST_POINT_CAPE);
     public static final Predicate<PItem> ARDOUGNE_CLOAK_FILTER = Filters.Items.processedIdEquals(ItemID.ARDOUGNE_CLOAK_1);
+    public static final Predicate<PItem> ARDOUGNE_CLOAK2_FILTER = Filters.Items.idEquals(ImmutableSet.of(ItemID.ARDOUGNE_CLOAK_2, ItemID.ARDOUGNE_CLOAK_3, ItemID.ARDOUGNE_CLOAK_4));
     public static final Predicate<PItem> CONSTRUCTION_CAPE_FILTER = Filters.Items.processedIdEquals(ItemID.CONSTRUCT_CAPE);
     public static final Predicate<PItem> SLAYER_RING = Filters.Items.processedIdEquals(ItemID.SLAYER_RING_1);
     public static final Predicate<PItem> ENCHANTED_LYRE_FILTER = Filters.Items.processedIdEquals(ItemID.ENCHANTED_LYRE1).and(i -> i.getId() != ItemID.ENCHANTED_LYRE);
@@ -80,7 +81,7 @@ public class WearableItemTeleport {
             return false;
         }
         boolean waitRes = WaitFor.condition(
-                PUtils.random(3800, 4600), () -> {
+                PUtils.random(4200, 4800), () -> {
                     NPCInteraction.handleConversationRegex(regex);
                     if (startingPosition.distanceToHypotenuse(PPlayer.location()) > 5) {
                         return WaitFor.Return.SUCCESS;

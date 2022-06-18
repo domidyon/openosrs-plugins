@@ -4,6 +4,7 @@ import com.google.inject.Injector;
 import com.google.inject.Provides;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.events.*;
 import net.runelite.client.chat.ChatMessageManager;
@@ -78,6 +79,9 @@ public class PaistiSuite extends Plugin {
     private static DaxCredentialsProvider daxCredProvider;
     private static String daxKey;
     private static String daxSecret;
+    @Getter
+    private static int ardyCloakTeleports = 1;
+    private long ardyCloakTimer = Long.MAX_VALUE;
 
     public static PaistiSuite getInstance() {
         return instance;
@@ -163,6 +167,10 @@ public class PaistiSuite extends Plugin {
 
     @Subscribe
     private void onGameTick(final GameTick event) {
+        if (System.currentTimeMillis() > ardyCloakTimer) {
+            ardyCloakTeleports = 1;
+            ardyCloakTimer = Long.MAX_VALUE;
+        }
         PGroundItems.onGameTick(event);
     }
 
@@ -190,8 +198,18 @@ public class PaistiSuite extends Plugin {
     }
 
     @Subscribe
-    private void onBeforeRender(BeforeRender bf) {
-        //clientExecutor.runAllTasks();
+    public void onChatMessage(ChatMessage event) {
+        if (event.getType() != ChatMessageType.GAMEMESSAGE) {
+            return;
+        }
+        String message = event.getMessage();
+        if (message.endsWith("Try again tomorrow when the cape has recharged.")) {
+            ardyCloakTeleports = 0;
+            ardyCloakTimer = System.currentTimeMillis() + 21600000;
+        }
+        if (message.endsWith("Ardougne Farm teleports for today.")) {
+            ardyCloakTeleports = 1;
+        }
     }
 
     @Subscribe

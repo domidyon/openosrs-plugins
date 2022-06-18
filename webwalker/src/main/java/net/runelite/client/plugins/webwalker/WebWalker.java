@@ -353,7 +353,7 @@ public class WebWalker extends PScript {
             statuses.add(r.getPathStatus());
         }
         for (PathStatus r : statuses) {
-            PUtils.sendGameMessage(r.toString());
+            PUtils.sendGameMessage(r.name());
         }
         if (statuses.contains(PathStatus.RATE_LIMIT_EXCEEDED)) {
             PUtils.sendGameMessage("Consider buying your own Web Walking API key at https://admin.dax.cloud/webwalker");

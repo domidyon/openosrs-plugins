@@ -42,15 +42,15 @@ public enum MinigameTeleport {
     CASTLE_WARS(4, new RSTile(2439, 3092, 0), true),
     CLAN_WARS(5, new RSTile(3151, 3636, 0), true),
     FISHING_TRAWLER(7, new RSTile(2658, 3158, 0), true, () -> PUtils.getClient().getRealSkillLevel(Skill.FISHING) >= 15),
-    LMS(10, new RSTile(3149, 3635, 0), true),
-    NMZ(11, new RSTile(2611, 3121, 0), true, () -> QuestChecker.getNmzQuestsCompleted() >= 5),
-    PEST_CONTROL(12, new RSTile(2653, 2655, 0), true, () -> PPlayer.getPlayer().getCombatLevel() >= 40),
-    RAT_PITS_VARROCK(14, new RSTile(3263, 3406, 0), false, () -> Quest.RATCATCHERS.getState(PUtils.getClient()) == QuestState.FINISHED),
-    SHADES_OF_MORTON(15, new RSTile(3500, 3300, 0), true, () -> Quest.SHADES_OF_MORTTON.getState(PUtils.getClient()) == QuestState.FINISHED),
-    TITHE_FARM(20, new RSTile(1793, 3501, 0), false),
-    TROUBLE_BREWING(21, new RSTile(3811, 3021, 0), true, () -> Quest.CABIN_FEVER.getState(PUtils.getClient()) == QuestState.FINISHED
+    LMS(11, new RSTile(3149, 3635, 0), true),
+    NMZ(12, new RSTile(2611, 3121, 0), true, () -> QuestChecker.getNmzQuestsCompleted() >= 5),
+    PEST_CONTROL(13, new RSTile(2653, 2655, 0), true, () -> PPlayer.getPlayer().getCombatLevel() >= 40),
+    RAT_PITS_VARROCK(15, new RSTile(3263, 3406, 0), false, () -> Quest.RATCATCHERS.getState(PUtils.getClient()) == QuestState.FINISHED),
+    SHADES_OF_MORTON(16, new RSTile(3500, 3300, 0), true, () -> Quest.SHADES_OF_MORTTON.getState(PUtils.getClient()) == QuestState.FINISHED),
+    TITHE_FARM(21, new RSTile(1793, 3501, 0), false),
+    TROUBLE_BREWING(22, new RSTile(3811, 3021, 0), true, () -> Quest.CABIN_FEVER.getState(PUtils.getClient()) == QuestState.FINISHED
             && PUtils.getClient().getRealSkillLevel(Skill.COOKING) >= 40),
-    TZHAAR_FIT_PIT(22, new RSTile(2402, 5181, 0), true);
+    TZHAAR_FIT_PIT(23, new RSTile(2402, 5181, 0), true);
 
     @Getter
     private final int id;

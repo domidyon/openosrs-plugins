@@ -7,6 +7,7 @@ import net.runelite.api.ItemID;
 import net.runelite.api.MenuAction;
 import net.runelite.api.util.Text;
 import net.runelite.api.widgets.WidgetInfo;
+import net.runelite.client.plugins.paistisuite.PaistiSuite;
 import net.runelite.client.plugins.paistisuite.api.*;
 import net.runelite.client.plugins.paistisuite.api.WebWalker.Teleports.teleport_utils.*;
 import net.runelite.client.plugins.paistisuite.api.WebWalker.api_lib.models.Requirement;
@@ -356,7 +357,13 @@ public enum Teleport {
     ECTOPHIAL(
             TeleportType.UNLIMITED_TELE, new RSTile(3660, 3524, 0),
             () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && HasItems.ECTOPHIAL_FILTER.getHasItem().checkHasItem(),
-            () -> RSItemHelper.click(Filters.Items.nameContains("Ectophial"), "Empty")
+            () -> {
+                if (RSItemHelper.click(Filters.Items.nameContains("Ectophial"), "Empty")) {
+                    PUtils.sleep(3600);
+                    return true;
+                }
+                return false;
+            }
     ),
 
     LLETYA(
@@ -405,8 +412,8 @@ public enum Teleport {
     ),
 
     CABBAGE_PATCH_TELEPORT(
-            TeleportType.UNLIMITED_TELE, new RSTile(3049, 3287, 0),
-            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && HasItems.EXPLORERS_RING_FILTER.getHasItem().checkHasItem() && PVars.getVarbit(4552) > 0,
+            TeleportType.UNLIMITED_TELE, new RSTile(3052, 3293, 0),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && HasItems.EXPLORERS_RING_FILTER.getHasItem().checkHasItem() && PVars.getVarbit(4552) < 3,
             () -> WearableItemTeleport.teleport(WearableItemTeleport.EXPLORERS_RING_FILTER, "Teleport")
     ),
 
@@ -420,6 +427,12 @@ public enum Teleport {
             TeleportType.UNLIMITED_TELE, new RSTile(2606, 3221, 0),
             () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && HasItems.ARDOUGNE_CLOAK_FILTER.getHasItem().checkHasItem(),
             () -> WearableItemTeleport.teleport(WearableItemTeleport.ARDOUGNE_CLOAK_FILTER, ".*Monastery.*")
+    ),
+
+    KANDARIN_FARM_PATCH_TELEPORT(
+            TeleportType.UNLIMITED_TELE, new RSTile(2668, 3375, 0),
+            () -> CachedBooleans.IN_MEMBERS_WORLD.getCachedBoolean().getBoolean() && HasItems.ARDOUGNE_CLOAK2_FILTER.getHasItem().checkHasItem() && PaistiSuite.getArdyCloakTeleports() > 0,
+            () -> WearableItemTeleport.teleport(WearableItemTeleport.ARDOUGNE_CLOAK2_FILTER, ".*Farm.*")
     ),
 
     RIMMINGTON_TELEPORT_TAB(
@@ -785,6 +798,7 @@ public enum Teleport {
         SLAYER_RING(new HasItem(WearableItemTeleport.SLAYER_RING)),
         CONSTRUCTION_CAPE_FILTER(new HasItem(WearableItemTeleport.CONSTRUCTION_CAPE_FILTER)),
         ARDOUGNE_CLOAK_FILTER(new HasItem(WearableItemTeleport.ARDOUGNE_CLOAK_FILTER)),
+        ARDOUGNE_CLOAK2_FILTER(new HasItem(WearableItemTeleport.ARDOUGNE_CLOAK2_FILTER)),
         QUEST_CAPE_FILTER(new HasItem(WearableItemTeleport.QUEST_CAPE_FILTER)),
         EXPLORERS_RING_FILTER(new HasItem(WearableItemTeleport.EXPLORERS_RING_FILTER)),
         CRAFTING_CAPE_FILTER(new HasItem(WearableItemTeleport.CRAFTING_CAPE_FILTER)),

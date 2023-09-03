@@ -31,7 +31,7 @@ public class WebWalkerServerApi{
         return webWalkerServerApi != null ? webWalkerServerApi : (webWalkerServerApi = new WebWalkerServerApi());
     }
 
-    private static final String WALKER_ENDPOINT = "https://walker.dax.cloud/", TEST_ENDPOINT = "http://localhost:8080";
+    private static final String WALKER_ENDPOINT = "https://walker.dax.cloud", TEST_ENDPOINT = "http://localhost:8080";
 
     private static final String
             GENERATE_PATH = "/walker/generatePath",
